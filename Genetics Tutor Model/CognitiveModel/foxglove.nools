@@ -1,0 +1,38 @@
+import("productionrules.nools");
+
+global probname = "foxglove";
+global probtxt = "Wild foxglove Digitalis purpurea have many different flower colors. Among the most common are magenta and white. By crossing the plants that have been collected, determine everything you can about the genotypes of the following three individual plants.";
+
+global strain1 = {n: 1, name: "Magenta-1", phenotype: "magenta"};
+global strain2 = {n: 2, name: "White-1", phenotype: "white"};
+global strain3 = {n: 3, name: "White-2", phenotype: "white"};
+
+global cross1 = {strains: ["Magenta-1", "Magenta-1"],
+				offspringExt: "100% Magenta",
+				offspringInt: [100, "magenta"]
+			};
+			
+global cross2 = {strains: ["Magenta-1", "White-1"],
+				offspringExt: "100% Magenta",
+				offspringInt: [100, "magenta"]
+			};
+
+global cross3 = {strains: ["Magenta-1", "White-2"],
+				offspringExt: "100% Magenta",
+				offspringInt: [100, "magenta"]
+			};
+
+global cross4 = {strains: ["White-1", "White-1"],
+				offspringExt: "100% White",
+				offspringInt: [100, "white"]
+			};
+			
+global cross5 = {strains: ["White-1", "White-2"],
+				offspringExt: "100% White",
+				offspringInt: [100, "white"]
+			};
+
+global cross6 = {strains: ["White-2", "White-2"],
+				offspringExt: "100% White",
+				offspringInt: [100, "white"]
+			};

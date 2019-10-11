@@ -1,0 +1,38 @@
+import("productionrules.nools");
+
+global probname = "lupine";
+global probtxt = "The lupine Lupinues wyethii is a widely distributed native wildflower.  Normally the flowers are blue, but in one location, pink flowers are also found.  Plants with both blue and pink flowers were collected.  Make crosses between the three strains provided to determine all you can about their genotypes.";
+
+global strain1 = {n: 1, name: "Pink-1", phenotype: "pink"};
+global strain2 = {n: 2, name: "Blue-1", phenotype: "blue"};
+global strain3 = {n: 3, name: "Blue-2", phenotype: "blue"};
+
+global cross1 = {strains: ["Pink-1", "Pink-1"],
+				offspringExt: "100% Pink",
+				offspringInt: [100, "pink"]
+			};
+			
+global cross2 = {strains: ["Pink-1", "Blue-1"],
+				offspringExt: "100% Blue",
+				offspringInt: [100, "blue"]
+			};
+
+global cross3 = {strains: ["Pink-1", "Blue-2"],
+				offspringExt: "50% Pink, 50% Blue",
+				offspringInt: [50, "pink", 50, "blue"]
+			};
+
+global cross4 = {strains: ["Blue-1", "Blue-1"],
+				offspringExt: "100% Blue",
+				offspringInt: [100, "blue"]
+			};
+			
+global cross5 = {strains: ["Blue-1", "Blue-2"],
+				offspringExt: "100% Blue",
+				offspringInt: [100, "blue"]
+			};
+
+global cross6 = {strains: ["Blue-2", "Blue-2"],
+				offspringExt: "25% Pink, 75% Blue",
+				offspringInt: [25, "pink", 75, "blue"]
+			};

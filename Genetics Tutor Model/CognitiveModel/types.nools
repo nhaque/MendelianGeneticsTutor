@@ -1,0 +1,99 @@
+// This file contains some possibly incomplete fact type definitions for the
+// Mendel Abductive Reasoning Tutor
+//
+// The file contains all types that are needed, so no need to create new ones,
+// but the types that are provided may not have all the slots that are necessary.
+//
+
+define Problem {
+	name: null,
+	subgoal: null,
+	firstStrainCurCross: null,
+	curCross: null,
+	strains: null,
+	interfaceRows: null,
+	constructor: function(n, s, i) {
+		this.name = n;
+		this.subgoal = "selectCross";
+		this.strains = s;
+		this.interfaceRows = i;
+	}
+}
+
+define Strain {
+	name: null,
+	n: null,
+	phenotype: null,
+	partialConclusions: null,
+	partialConclusionWritten: false,
+	finalConclusion: null,
+	finalConclusionWritten: null,
+	iePartialConclusions: null,
+	ieFinalConclusion: null,
+	constructor: function(nm, n, pheno, iePartial, ieFinal) {
+		this.name = nm;
+		this.n = n;
+		this.phenotype = pheno;
+		this.partialConclusions = [];
+		this.partialConclusionWritten = false;
+		this.finalConclusion = "";
+		this.finalConclusionWritten = false;
+		this.iePartialConclusions = iePartial;
+		this.ieFinalConclusion = ieFinal;
+	}
+}
+
+define Cross {
+	name: null,
+	strains: null,
+	offspringExt: null,
+	offspringInt: null,
+	constructor: function(n, s, oExt, oInt) {
+		this.name = n;
+		this.strains = s;
+		this.offspringExt = oExt;
+		this.offspringInt = oInt;
+	}
+}
+
+define interfaceRow {
+	name: null,
+	iesStrains: null,
+	ieResult: null,
+	constructor: function(n, ies, ier) {
+		this.name = n;
+		this.iesStrains = ies;
+		this.ieResult = ier;
+	}
+}
+
+define interfaceElement {
+	name: null,
+	value: null,
+	constructor: function(n, v) {
+		this.name = n;
+		this.value = v;
+	}
+}
+
+define StudentValues {
+	selection: null,
+	action: null,
+	input: null,
+	constructor: function(s, a, i) {
+		this.selection = s;
+		this.action = a;
+		this.input = i;
+	}
+}
+
+define TPA {
+	selection: null,
+	action: null,
+	input: null,
+	constructor: function(s, a, i) {
+		this.selection = s;
+		this.action = a;
+		this.input = i;
+	}
+}
