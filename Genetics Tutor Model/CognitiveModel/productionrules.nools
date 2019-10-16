@@ -327,6 +327,14 @@ rule dummyInferFromCrossRule {
 //    make the final conclusion that s1 is Hr
 
 
+// inferHrFromPartialsHrOrHetAndHomozygous (#3)
+// IF there is a makeInferences subgoal
+//    AND s is a strain with no final conclusion, but has two partial conclusions 
+//        "Het or Hr" and "homozygous"
+// THEN
+//    make the final conclusion that s is Hr
+
+
 // doneInferencing
 // IF we have a makeInferences subgoal
 // THEN move on to the enterInferences subgoal
