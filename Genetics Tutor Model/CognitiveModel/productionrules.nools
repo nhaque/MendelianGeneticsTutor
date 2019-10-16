@@ -266,8 +266,8 @@ rule selectSecondStrainSame {
 
 // dummyInferFromCrossRule
 // IF there is an inferFromCross subgoal
-//      AND c is the current Cross
-//    AND    < other conditions regarding c>
+//    AND c is the current Cross
+//    AND < other conditions regarding c>
 // THEN
 //    < make inferences just from the results of c>
 //    AND remove c from prob's curCross slot
@@ -304,6 +304,12 @@ rule dummyInferFromCrossRule {
 // You will need to write more rules for this subgoal,  based on your cognitive task analysis.
 //
 //--------------------------------------------------------------------------------------------
+
+// Naming keys
+// Hd = homozygous dominant
+// Hr = homozygous recessive
+// Het = heterozygous
+
 
 // doneInferencing
 // IF we have a makeInferences subgoal
