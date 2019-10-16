@@ -335,6 +335,23 @@ rule dummyInferFromCrossRule {
 //    make the final conclusion that s is Hr
 
 
+// inferHetFromPartialHetOrHrAndKnownRecessive (#4)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Het or Hr"
+//    AND s2 is an Hr strain with different phenotype as s1
+// THEN
+//    make the final conclusion that s1 is Het
+
+// inferHetFromPartialHetOrHrAndKnownDominant (#4-2)
+// Note: This is not in the instructions and it could be unnecessary
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Het or Hr"
+//    AND s2 is a strain with dominant phenotype (i.e. it is Het or Hd) that is
+//        the same as s1's phenotype
+// THEN
+//    make the final conclusion that s1 is Het
+
+
 // doneInferencing
 // IF we have a makeInferences subgoal
 // THEN move on to the enterInferences subgoal
