@@ -253,6 +253,17 @@ rule selectSecondStrainSame {
 //
 //--------------------------------------------------------------------------------------------
 
+
+// rule inferFromSameStrainSameType100_0
+// rule inferFromSameStrainSameType75_25
+
+// rule inferFromDiffStrainSameType100_0
+// rule inferFromDiffStrainSameType75_25
+
+// rule inferFromDiffStrainDiffType100_0
+// rule inferFromDiffStrainDiffType50_50
+
+
 // dummyInferFromCrossRule
 // IF there is an inferFromCross subgoal
 //      AND c is the current Cross
@@ -269,6 +280,8 @@ rule dummyInferFromCrossRule {
         c: Cross c.name === cName ;
     }
     then {
+		console.log("dummyInfer");
+		
         modify(prob, "curCross", null);
         retract(c);
         modify(prob, "subgoal", "makeInferences");
