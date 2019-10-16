@@ -342,7 +342,7 @@ rule dummyInferFromCrossRule {
 // THEN
 //    make the final conclusion that s1 is Het
 
-// inferHetFromPartialHetOrHrAndKnownDominant (#4-2)
+// inferHetFromPartialHetOrHrAndKnownDominant (#4-1)
 // Note: This is not in the instructions and it could be unnecessary
 // IF there is a makeInferences subgoal
 //    AND s1 is a strain with no final conclusion, but partial conclusion "Het or Hr"
@@ -350,6 +350,23 @@ rule dummyInferFromCrossRule {
 //        the same as s1's phenotype
 // THEN
 //    make the final conclusion that s1 is Het
+
+
+// inferHdFromPartialHeterozygousAndKnownDominant (#5)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Homozygous"
+//    AND s2 is a strain with dominant phenotype (i.e. it is Het or Hd) that is
+//        the same as s1's phenotype
+// THEN
+//    make the final conclusion that s1 is Hd
+
+// inferHdFromPartialHeterozygousAndKnownRecessive (#5-1)
+// Note: This is not in the instructions and it could be unnecessary
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Homozygous"
+//    AND s2 is an Hr strain with different phenotype as s1
+// THEN
+//    make the final conclusion that s1 is Hd
 
 
 // doneInferencing
@@ -404,7 +421,7 @@ rule doneWithMandatoryInput {
 // 1. Rule uses "not" on the rhs.
 // 2. Small subtlety:   It is OK to not write a partial conclusion, for a given strain, if
 //        there is a final conclusion for that same strain. (It sometimes happens that
-//        following a cross, both a partial concluson and a  final conclusion are inferred,
+//        following a cross, both a partial concluson and a final conclusion are inferred,
 //        both for the same strain.
 //
 // Questions to help your understanding
