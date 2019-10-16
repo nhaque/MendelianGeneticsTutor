@@ -8,16 +8,16 @@ import("types.nools");
 // Functions
 //
 function removeDuplicates(l) {
-	var ret = [];
-	if (!(l instanceof Array) || l.length === 0) {
-		return l;
-	}
-	for (var i = 0; i < l.length; i++) {
-		if (ret.indexOf(l[i]) < 0) {
-			ret.push(l[i]);
-		}
-	}
-	return ret;
+    var ret = [];
+    if (!(l instanceof Array) || l.length === 0) {
+        return l;
+    }
+    for (var i = 0; i < l.length; i++) {
+        if (ret.indexOf(l[i]) < 0) {
+            ret.push(l[i]);
+        }
+    }
+    return ret;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -28,49 +28,49 @@ function removeDuplicates(l) {
 //
 //--------------------------------------------------------------------------------------------
 rule bootstrap {
-	when {
-		b: Boolean b === true from true;
-	}
-	then {
-		assert(new TPA("problemstatement", "UpdateTextArea", probtxt));
-		assert(new TPA("strain1", "UpdateTextField", strain1.name));
-		assert(new TPA("strain2", "UpdateTextField", strain2.name));
-		assert(new TPA("strain3", "UpdateTextField", strain3.name));
-	
-		assert(new Strain(strain1.name, strain1.n, strain1.phenotype, "concPartStr1", "concFinalStr1"));
-		assert(new Strain(strain2.name, strain2.n, strain2.phenotype, "concPartStr2", "concFinalStr2"));
-		assert(new Strain(strain3.name, strain3.n, strain3.phenotype, "concPartStr3", "concFinalStr3"));
-	
-		assert(new Cross("cross1", cross1.strains, cross1.offspringExt, cross1.offspringInt));
-		assert(new Cross("cross2", cross2.strains, cross2.offspringExt, cross2.offspringInt));
-		assert(new Cross("cross3", cross3.strains, cross3.offspringExt, cross3.offspringInt));
-		assert(new Cross("cross4", cross4.strains, cross4.offspringExt, cross4.offspringInt));
-		assert(new Cross("cross5", cross5.strains, cross5.offspringExt, cross5.offspringInt));
-		assert(new Cross("cross6", cross6.strains, cross6.offspringExt, cross6.offspringInt));
-		
-		var crossName, rowNames = [];
-		for (var i = 1; i < 7; i++) {
-			crossName = "Cr"+i;
-			rowNames.push(crossName+"Row");
-			assert(new interfaceElement(crossName+"Str1", null));
-			assert(new interfaceElement(crossName+"Str2", null));
-			assert(new interfaceElement(crossName+"Offspring", null));
-			assert(new interfaceRow(crossName+"Row", [crossName+"Str1",crossName+"Str2"], crossName+"Offspring")); 
-		}
-		
-		var intElPartName, intElFinalName;
-		for (var i = 1; i < 4; i++) {
-			intElPartName = "concPartStr"+i;
-			intElFinalName = "concFinalStr"+i;
-			assert(new interfaceElement(intElPartName, null));
-			assert(new interfaceElement(intElFinalName, null));
-		}
-		
-		assert(new Problem(probname, [strain1.name, strain2.name, strain3.name], rowNames));
-	
-		setProblemAttribute("use_backtracking", true);
-		halt();
-	}
+    when {
+        b: Boolean b === true from true;
+    }
+    then {
+        assert(new TPA("problemstatement", "UpdateTextArea", probtxt));
+        assert(new TPA("strain1", "UpdateTextField", strain1.name));
+        assert(new TPA("strain2", "UpdateTextField", strain2.name));
+        assert(new TPA("strain3", "UpdateTextField", strain3.name));
+    
+        assert(new Strain(strain1.name, strain1.n, strain1.phenotype, "concPartStr1", "concFinalStr1"));
+        assert(new Strain(strain2.name, strain2.n, strain2.phenotype, "concPartStr2", "concFinalStr2"));
+        assert(new Strain(strain3.name, strain3.n, strain3.phenotype, "concPartStr3", "concFinalStr3"));
+    
+        assert(new Cross("cross1", cross1.strains, cross1.offspringExt, cross1.offspringInt));
+        assert(new Cross("cross2", cross2.strains, cross2.offspringExt, cross2.offspringInt));
+        assert(new Cross("cross3", cross3.strains, cross3.offspringExt, cross3.offspringInt));
+        assert(new Cross("cross4", cross4.strains, cross4.offspringExt, cross4.offspringInt));
+        assert(new Cross("cross5", cross5.strains, cross5.offspringExt, cross5.offspringInt));
+        assert(new Cross("cross6", cross6.strains, cross6.offspringExt, cross6.offspringInt));
+        
+        var crossName, rowNames = [];
+        for (var i = 1; i < 7; i++) {
+            crossName = "Cr"+i;
+            rowNames.push(crossName+"Row");
+            assert(new interfaceElement(crossName+"Str1", null));
+            assert(new interfaceElement(crossName+"Str2", null));
+            assert(new interfaceElement(crossName+"Offspring", null));
+            assert(new interfaceRow(crossName+"Row", [crossName+"Str1",crossName+"Str2"], crossName+"Offspring")); 
+        }
+        
+        var intElPartName, intElFinalName;
+        for (var i = 1; i < 4; i++) {
+            intElPartName = "concPartStr"+i;
+            intElFinalName = "concFinalStr"+i;
+            assert(new interfaceElement(intElPartName, null));
+            assert(new interfaceElement(intElFinalName, null));
+        }
+        
+        assert(new Problem(probname, [strain1.name, strain2.name, strain3.name], rowNames));
+    
+        setProblemAttribute("use_backtracking", true);
+        halt();
+    }
 }
 
 //--------------------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ rule bootstrap {
 // Rules for the selectCross subgoal
 //
 // Note: The rules for this subgoal are complete. You should not need more rules and you should
-//		not need to change the current rules for this subgoal.
+//        not need to change the current rules for this subgoal.
 //
 //--------------------------------------------------------------------------------------------
 
@@ -96,23 +96,23 @@ rule bootstrap {
 //     the firstStrainCurCross slot)
 //
 rule selectFirstStrain {
-	when {
-		prob: Problem prob.subgoal === "selectCross" && !prob.firstStrainCurCross && 
-				prob.interfaceRows {interfaceRows: intRows};
-		s: Strain {name: s1};
-		exists(c: Cross s1 in c.strains);
-		intRow: interfaceRow intRow.name === intRows[0] {iesStrains: intRowStrains};
-		ie: interfaceElement !ie.value && ie.name in intRowStrains {name: selection};
-	}
-	then {
-		if (checkSAI({selection: selection, action: "UpdateTextField", input: s1})) {
-			modify(prob, "firstStrainCurCross", s1);
-			modify(ie, "value", s1);
-			halt();
-		} else {
-			backtrack();
-		}
-	}
+    when {
+        prob: Problem prob.subgoal === "selectCross" && !prob.firstStrainCurCross && 
+                prob.interfaceRows {interfaceRows: intRows};
+        s: Strain {name: s1};
+        exists(c: Cross s1 in c.strains);
+        intRow: interfaceRow intRow.name === intRows[0] {iesStrains: intRowStrains};
+        ie: interfaceElement !ie.value && ie.name in intRowStrains {name: selection};
+    }
+    then {
+        if (checkSAI({selection: selection, action: "UpdateTextField", input: s1})) {
+            modify(prob, "firstStrainCurCross", s1);
+            modify(ie, "value", s1);
+            halt();
+        } else {
+            backtrack();
+        }
+    }
 }
 // Notes re selectFirstStrain
 // 1. The Nools construct "exists" (wrapped around a constraint) tests whether there is at
@@ -120,8 +120,8 @@ rule selectFirstStrain {
 //    activation
 
 // Questions to help you understand the rule selectFirstStrain (Note: these questions
-//		may gradually become clear as you work on the model.  Same for the questions about
-//		other rules.)
+//        may gradually become clear as you work on the model.  Same for the questions about
+//        other rules.)
 // 1. Does this rule allow students to first enter a strain in the second input field of a
 //    rowfirst (i.e., before entering one in the first field)? How, or how not?
 // 2. Does this rule allow students to skip rows of input fields? How or how not?
@@ -143,41 +143,41 @@ rule selectFirstStrain {
 //    AND r is (the fact representing) the first not-fully-completed row in the
 //              interface
 //    AND ie2 is (a fact representing) an open input field (for entering a strain) in row r
-//	  AND ie3 is (the fact representing) the result field (or offspring field) in row r
+//      AND ie3 is (the fact representing) the result field (or offspring field) in row r
 //  THEN
 //     Write s2 into ie2  (i.e., select s2 as the second strain used in the next cross)
 //     AND (as tutor-performed action) write the offspring into ie3 and lock ie3
 //     AND Update the semantic representation of the problem by
-//			a. setting the slot firstStrainCurCross to null
-//			b. deleting the first entry from its interfaceRows slot (so this slot always
-//					lists only the unused rows)
-//			c. store c's name in  the curCross slot (needed later for making inferences)
+//            a. setting the slot firstStrainCurCross to null
+//            b. deleting the first entry from its interfaceRows slot (so this slot always
+//                    lists only the unused rows)
+//            c. store c's name in  the curCross slot (needed later for making inferences)
 //     AND move on to the next subgoal (i.e., set prob's subgoal slot to "inferFromCross")
 //
 rule selectSecondStrainDiff {
-	when {
-		prob: Problem prob.subgoal === "selectCross" && prob.firstStrainCurCross  && 
-				prob.interfaceRows {interfaceRows: intRows, firstStrainCurCross: s1};
-		str2: Strain str2.name !== s1 {name: s2};
-		c: Cross s1 in c.strains && s2 in c.strains {offspringExt: o};
-		r: interfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
-		ie2: interfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
-		ie3: interfaceElement ie3.name === sel3;
-	}
-	then {
-		if (checkSAI({selection: sel2, action: "UpdateTextField", input: s2})) {
-			modify(ie2, "value", s2);
-			assert(new TPA(sel3, "UpdateTextField", o));
-			assert(new TPA(sel3, "lock", true));
-			modify(prob, "firstStrainCurCross", null);
-			modify(prob, "interfaceRows", intRows.slice(1));
-			modify(prob, "curCross", c.name);
-			modify(prob, "subgoal", "inferFromCross");
-//			halt();     // highly unusual!
-		} else {
-			backtrack();
-		}
-	}
+    when {
+        prob: Problem prob.subgoal === "selectCross" && prob.firstStrainCurCross  && 
+                prob.interfaceRows {interfaceRows: intRows, firstStrainCurCross: s1};
+        str2: Strain str2.name !== s1 {name: s2};
+        c: Cross s1 in c.strains && s2 in c.strains {offspringExt: o};
+        r: interfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
+        ie2: interfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
+        ie3: interfaceElement ie3.name === sel3;
+    }
+    then {
+        if (checkSAI({selection: sel2, action: "UpdateTextField", input: s2})) {
+            modify(ie2, "value", s2);
+            assert(new TPA(sel3, "UpdateTextField", o));
+            assert(new TPA(sel3, "lock", true));
+            modify(prob, "firstStrainCurCross", null);
+            modify(prob, "interfaceRows", intRows.slice(1));
+            modify(prob, "curCross", c.name);
+            modify(prob, "subgoal", "inferFromCross");
+//            halt();     // highly unusual!
+        } else {
+            backtrack();
+        }
+    }
 }
 // Notes re selectSecondStrainDiff
 // 1. The Javascript function "slice" (used  on the rhs of this rule) is used to take a 
@@ -186,63 +186,63 @@ rule selectSecondStrainDiff {
 //
 // Questions to help your understanding of rule selectSecondStrainDiff
 // 1. How does this rule prevent selecting a cross that already has been tried? (Note: this 
-//			behavior also depends on other rules you will need to write.)
+//            behavior also depends on other rules you will need to write.)
 // 2. Why is it useful to set the firstStrainCurCross to null? (Hint: think of subsequent
-//			crosses the student might want to explore.)
+//            crosses the student might want to explore.)
 // 3. Why does this rule delete the entry from the prob's interfaceRows?
 // 4. Why does the rule not halt() upon finding that its observable action equals that
-//			of the student?   What is it that we want to happen "further down the chain?"
+//            of the student?   What is it that we want to happen "further down the chain?"
 
 
 // selectSecondStrainSame (for self-crosses)
 // IF there is a selectCross subgoal
 //    AND we have selected the first strain for the current cross (with name s1)
 //    AND c is an (untried) cross with s1 and s1 as the strains (i.e., crossing s1
-//			with itself)
+//            with itself)
 //    AND r is (the fact representing) the first not-fully-completed row in the
 //              interface
 //    AND ie2 is (a fact representing) an open input field (for entering a strain) in row r
-//	  AND ie3 is (the fact representing) the result field (or offspring field) in row r
+//      AND ie3 is (the fact representing) the result field (or offspring field) in row r
 //  THEN
 //     Write s1 into ie2  (i.e., select s1 as the second strain used in the next cross)
 //     AND (as tutor-performed action) write the offspring into ie3 and lock ie3
 //     AND Update the semantic representation of the problem by
-//			a. setting the slot firstStrainCurCross to null
-//			b. deleting the first entry from its interfaceRows slot (so this slot always
-//					lists only the unused rows)
-//			c. store c's name in  the curCross slot (needed later for making inferences)
+//            a. setting the slot firstStrainCurCross to null
+//            b. deleting the first entry from its interfaceRows slot (so this slot always
+//                    lists only the unused rows)
+//            c. store c's name in  the curCross slot (needed later for making inferences)
 //     AND move on to the next subgoal (i.e., set prob's subgoal slot to "inferFromCross")
 //
 rule selectSecondStrainSame {
-	when {
-		prob: Problem prob.subgoal === "selectCross" && prob.firstStrainCurCross  && 
-				prob.interfaceRows {interfaceRows: intRows, firstStrainCurCross: s1};
-		c: Cross c.strains[0] === s1 && c.strains[1] === s1 {offspringExt: o};
-		r: interfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
-		ie2: interfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
-		ie3: interfaceElement ie3.name === sel3;
-	}
-	then {
-		if (checkSAI({selection: sel2, action: "UpdateTextField", input: s1})) {
-			modify(ie2, "value", s1);
-			assert(new TPA(sel3, "UpdateTextField", o));
-			assert(new TPA(sel3, "lock", true));
-			modify(prob, "firstStrainCurCross", null);
-			modify(prob, "interfaceRows", intRows.slice(1));
-			modify(prob, "curCross", c.name);
-			modify(prob, "subgoal", "inferFromCross");
-//			halt();    // highly unusual!
-		} else {
-			backtrack();
-		}
-	}
+    when {
+        prob: Problem prob.subgoal === "selectCross" && prob.firstStrainCurCross  && 
+                prob.interfaceRows {interfaceRows: intRows, firstStrainCurCross: s1};
+        c: Cross c.strains[0] === s1 && c.strains[1] === s1 {offspringExt: o};
+        r: interfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
+        ie2: interfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
+        ie3: interfaceElement ie3.name === sel3;
+    }
+    then {
+        if (checkSAI({selection: sel2, action: "UpdateTextField", input: s1})) {
+            modify(ie2, "value", s1);
+            assert(new TPA(sel3, "UpdateTextField", o));
+            assert(new TPA(sel3, "lock", true));
+            modify(prob, "firstStrainCurCross", null);
+            modify(prob, "interfaceRows", intRows.slice(1));
+            modify(prob, "curCross", c.name);
+            modify(prob, "subgoal", "inferFromCross");
+//            halt();    // highly unusual!
+        } else {
+            backtrack();
+        }
+    }
 }
 // Notes re selectSecondStrainSame
 // 1. Note the right-hand side is virtually identical to that of selectSecondStrainDiff.
-//		Generally, such duplication is to be avoided in software engineering (Jonathan would
-//		cringe at this rule) but I found it easier to express the lhs separately for the 
-//		Same and Diff cases, rather than combine them in a single rule. (But of course 
-//		writing a single rule can be done.)
+//        Generally, such duplication is to be avoided in software engineering (Jonathan would
+//        cringe at this rule) but I found it easier to express the lhs separately for the 
+//        Same and Diff cases, rather than combine them in a single rule. (But of course 
+//        writing a single rule can be done.)
 
 
 //--------------------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ rule selectSecondStrainSame {
 
 // dummyInferFromCrossRule
 // IF there is an inferFromCross subgoal
-//	  AND c is the current Cross
+//      AND c is the current Cross
 //    AND    < other conditions regarding c>
 // THEN
 //    < make inferences just from the results of c>
@@ -264,24 +264,24 @@ rule selectSecondStrainSame {
 //    AND set the subgoal to makeInferences
 //
 rule dummyInferFromCrossRule {
-	when {
-		prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
-		c: Cross c.name === cName ;
-	}
-	then {
-		modify(prob, "curCross", null);
-		retract(c);
-		modify(prob, "subgoal", "makeInferences");
-	}
+    when {
+        prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
+        c: Cross c.name === cName ;
+    }
+    then {
+        modify(prob, "curCross", null);
+        retract(c);
+        modify(prob, "subgoal", "makeInferences");
+    }
 }
 // Notes re dummyInferFromCrossRule
 // 1. You are going to have a set of rules, based on your cognitive task analysis, that all
-//		follow this same patterns
+//        follow this same patterns
 // 2. These rules are strict alternatives in that for any cross, only one applies.
 //
 // Questions to help your understanding
 // 1. What's the critical difference  between subgoal inferFromCross and subgoal 
-//		makeInference?
+//        makeInference?
 
 
 //--------------------------------------------------------------------------------------------
@@ -297,22 +297,22 @@ rule dummyInferFromCrossRule {
 // THEN move on to the enterInferences subgoal
 //
 rule doneInferencing {
-	salience: -5;         //  critical!!
-	when {
-		prob: Problem prob.subgoal === "makeInferences";
-	}
-	then {
-		modify(prob, "subgoal", "enterInferences");
-		halt();
-	}
+    salience: -5;         //  critical!!
+    when {
+        prob: Problem prob.subgoal === "makeInferences";
+    }
+    then {
+        modify(prob, "subgoal", "enterInferences");
+        halt();
+    }
 }
 // Notes re dummyInferFromCrossRule
 // 1. This is NOT a dummy rule; i.e., this rule will be needed in the final version of 
-//		your model
+//        your model
 // Questions to help your understanding
 // 1. Why is this rule needed?
 // 2. Why is it critical that is has low salience? (This may be more clear when you  have 
-//		additional rules, but perhaps you can already see why before you write those rules.)
+//        additional rules, but perhaps you can already see why before you write those rules.)
 
 //--------------------------------------------------------------------------------------------
 //
@@ -331,25 +331,25 @@ rule doneInferencing {
 //    Move on to the selectCross subgoal
 
 rule doneWithMandatoryInput {
-	when {
-		prob: Problem prob.subgoal === "enterInferences";
-		not(s: Strain s.finalConclusion && !s.finalConclusionWritten);
-		not(s: Strain s.partialConclusions.length > 0 && !s.partialConclusionWritten && !s.finalConclusionWritten);
-	}
-	then {
-		modify(prob, "subgoal", "selectCross");
-	}
+    when {
+        prob: Problem prob.subgoal === "enterInferences";
+        not(s: Strain s.finalConclusion && !s.finalConclusionWritten);
+        not(s: Strain s.partialConclusions.length > 0 && !s.partialConclusionWritten && !s.finalConclusionWritten);
+    }
+    then {
+        modify(prob, "subgoal", "selectCross");
+    }
 }
 // Notes doneWithMandatoryInput
 // 1. Rule uses "not" on the rhs.
 // 2. Small subtlety:   It is OK to not write a partial conclusion, for a given strain, if
-//		there is a final conclusion for that same strain. (It sometimes happens that
-//		following a cross, both a partial concluson and a  final conclusion are inferred,
-//		both for the same strain.
+//        there is a final conclusion for that same strain. (It sometimes happens that
+//        following a cross, both a partial concluson and a  final conclusion are inferred,
+//        both for the same strain.
 //
 // Questions to help your understanding
 // 1. How does this rule help ensure that the student can enter the next cross only after
-//		all inferences for the current cross have been entered?
+//        all inferences for the current cross have been entered?
 //
 
 //--------------------------------------------------------------------------------------------
