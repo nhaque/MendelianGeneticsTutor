@@ -310,6 +310,22 @@ rule dummyInferFromCrossRule {
 // Hr = homozygous recessive
 // Het = heterozygous
 
+// inferHrFromKnownRecessive (#1)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion
+//    AND s2 is an Hr strain with the same phenotype as s1
+// THEN
+//    make the final conclusion that s1 is Hr
+
+
+// inferHrFromKnownDominant (#2)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion
+//    AND s2 is a strain with dominant phenotype (i.e. it is Het or Hd) that is
+//        different from s1's phenotype
+// THEN
+//    make the final conclusion that s1 is Hr
+
 
 // doneInferencing
 // IF we have a makeInferences subgoal
