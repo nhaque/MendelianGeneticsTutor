@@ -266,8 +266,8 @@ rule selectSecondStrainSame {
 
 // dummyInferFromCrossRule
 // IF there is an inferFromCross subgoal
-//      AND c is the current Cross
-//    AND    < other conditions regarding c>
+//    AND c is the current Cross
+//    AND < other conditions regarding c>
 // THEN
 //    < make inferences just from the results of c>
 //    AND remove c from prob's curCross slot
@@ -304,6 +304,70 @@ rule dummyInferFromCrossRule {
 // You will need to write more rules for this subgoal,  based on your cognitive task analysis.
 //
 //--------------------------------------------------------------------------------------------
+
+// Naming keys
+// Hd = homozygous dominant
+// Hr = homozygous recessive
+// Het = heterozygous
+
+// inferHrFromKnownRecessive (#1)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion
+//    AND s2 is an Hr strain with the same phenotype as s1
+// THEN
+//    make the final conclusion that s1 is Hr
+
+
+// inferHrFromKnownDominant (#2)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion
+//    AND s2 is a strain with dominant phenotype (i.e. it is Het or Hd) that is
+//        different from s1's phenotype
+// THEN
+//    make the final conclusion that s1 is Hr
+
+
+// inferHrFromPartialsHrOrHetAndHomozygous (#3)
+// IF there is a makeInferences subgoal
+//    AND s is a strain with no final conclusion, but has two partial conclusions 
+//        "Het or Hr" and "homozygous"
+// THEN
+//    make the final conclusion that s is Hr
+
+
+// inferHetFromPartialHetOrHrAndKnownRecessive (#4)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Het or Hr"
+//    AND s2 is an Hr strain with different phenotype as s1
+// THEN
+//    make the final conclusion that s1 is Het
+
+// inferHetFromPartialHetOrHrAndKnownDominant (#4-1)
+// Note: This is not in the instructions and it could be unnecessary
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Het or Hr"
+//    AND s2 is a strain with dominant phenotype (i.e. it is Het or Hd) that is
+//        the same as s1's phenotype
+// THEN
+//    make the final conclusion that s1 is Het
+
+
+// inferHdFromPartialHeterozygousAndKnownDominant (#5)
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Homozygous"
+//    AND s2 is a strain with dominant phenotype (i.e. it is Het or Hd) that is
+//        the same as s1's phenotype
+// THEN
+//    make the final conclusion that s1 is Hd
+
+// inferHdFromPartialHeterozygousAndKnownRecessive (#5-1)
+// Note: This is not in the instructions and it could be unnecessary
+// IF there is a makeInferences subgoal
+//    AND s1 is a strain with no final conclusion, but partial conclusion "Homozygous"
+//    AND s2 is an Hr strain with different phenotype as s1
+// THEN
+//    make the final conclusion that s1 is Hd
+
 
 // doneInferencing
 // IF we have a makeInferences subgoal
@@ -357,7 +421,7 @@ rule doneWithMandatoryInput {
 // 1. Rule uses "not" on the rhs.
 // 2. Small subtlety:   It is OK to not write a partial conclusion, for a given strain, if
 //        there is a final conclusion for that same strain. (It sometimes happens that
-//        following a cross, both a partial concluson and a  final conclusion are inferred,
+//        following a cross, both a partial concluson and a final conclusion are inferred,
 //        both for the same strain.
 //
 // Questions to help your understanding
