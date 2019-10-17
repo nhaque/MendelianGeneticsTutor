@@ -265,13 +265,13 @@ rule inferFromCrossSameStrainSameType100_0 {
         s: Strain s.name === c.strains[0];
     }
     then {
-        //console.log("dummyInfer1008");
-        console.log("Strain:");
-        
+        let n = s.partialConclusions;   
+        n.push("homozygous");
+
         modify(prob, "curCross", null);
         retract(c);
         modify(prob, "subgoal", "makeInferences");
-        //modify(s, )
+        modify(s, "partialConclusions", n);
     }
 }
 
