@@ -255,6 +255,26 @@ rule selectSecondStrainSame {
 
 
 // rule inferFromSameStrainSameType100_0
+//IF there is an inferFromCross subgoal
+//    AND c is the current Cross
+//    AND
+rule inferFromCrossSameStrainSameType100_0 {
+    when {
+        prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
+        c: Cross c.name === cName && c.strains[0] === c.strains[1] && c.offspringInt[0] === 100;
+        s: Strain s.name === c.strains[0];
+    }
+    then {
+        //console.log("dummyInfer1008");
+        console.log("Strain:");
+        
+        modify(prob, "curCross", null);
+        retract(c);
+        modify(prob, "subgoal", "makeInferences");
+        //modify(s, )
+    }
+}
+
 // rule inferFromSameStrainSameType75_25
 
 // rule inferFromDiffStrainSameType100_0
@@ -316,6 +336,7 @@ rule dummyInferFromCrossRule {
 //    AND s2 is an Hr strain with the same phenotype as s1
 // THEN
 //    make the final conclusion that s1 is Hr
+
 
 
 // inferHrFromKnownDominant (#2)
