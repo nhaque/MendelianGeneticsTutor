@@ -258,9 +258,15 @@ rule selectSecondStrainSame {
 
 
 // rule inferFromSameStrainSameType100_0
-//IF there is an inferFromCross subgoal
-//    AND c is the current Cross
-//    AND
+// IF there is an inferFromCross subgoal
+//    AND c is the current Cross such that the same strain is crossed with itself, and the
+//        offspring is 100% the same phenotype
+//    AND s is the strain being crossed
+// THEN
+//    infer the partial conclusion that s is homozygous
+//    AND remove c from prob's curCross slot
+//    AND retract c from working memory
+//    AND set the subgoal to makeInferences
 rule inferFromCrossSameStrainSameType100_0 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
@@ -270,11 +276,10 @@ rule inferFromCrossSameStrainSameType100_0 {
     then {
         let n = s.partialConclusions.slice();
         n.push(partialHomozygous);
-
+        modify(s, "partialConclusions", n);
         modify(prob, "curCross", null);
         retract(c);
         modify(prob, "subgoal", "makeInferences");
-        modify(s, "partialConclusions", n);
     }
 }
 
