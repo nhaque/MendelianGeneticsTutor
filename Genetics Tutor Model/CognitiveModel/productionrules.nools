@@ -28,6 +28,10 @@ function removeDuplicates(l) {
     return ret;
 }
 
+function isKnownDominantPhenotype(strain) {
+    return (strain.finalConclusion === finalHeterozygous) || (strain.finalConclusion === finalHd);
+}
+
 //--------------------------------------------------------------------------------------------
 //
 // Initializing working memory
@@ -377,8 +381,6 @@ rule dummyInferFromCrossRule {
         c: Cross c.name === cName ;
     }
     then {
-		console.log("dummyInfer");
-		
         modify(prob, "curCross", null);
         retract(c);
         modify(prob, "subgoal", "makeInferences");
@@ -423,7 +425,17 @@ rule dummyInferFromCrossRule {
 //        different from s1's phenotype
 // THEN
 //    make the final conclusion that s1 is Hr
-
+//
+rule inferHrFromKnownDominant {
+    when {
+        prob: Problem prob.subgoal === "makeInferences";
+        s1: Strain !s1.finalConclusion;
+        s2: Strain isKnownDominantPhenotype(s2) && s2.phenotype !== s1.phenotype;
+    }
+    then {
+        modify(s1, "finalConclusion", finalHr);
+    }
+}
 
 // inferHrFromPartialsHrOrHetAndHomozygous (#3)
 // IF there is a makeInferences subgoal
@@ -433,14 +445,14 @@ rule dummyInferFromCrossRule {
 //    make the final conclusion that s is Hr
 
 
-// inferHetFromPartialHetOrHrAndKnownRecessive (#4)
+// inferHetFromPartialHrOrHetAndKnownRecessive (#4)
 // IF there is a makeInferences subgoal
 //    AND s1 is a strain with no final conclusion, but partial conclusion "Het or Hr"
 //    AND s2 is an Hr strain with different phenotype as s1
 // THEN
 //    make the final conclusion that s1 is Het
 
-// inferHetFromPartialHetOrHrAndKnownDominant (#4-1)
+// inferHetFromPartialHrOrHetAndKnownDominant (#4-1)
 // Note: This is not in the instructions and it could be unnecessary
 // IF there is a makeInferences subgoal
 //    AND s1 is a strain with no final conclusion, but partial conclusion "Het or Hr"
@@ -450,15 +462,26 @@ rule dummyInferFromCrossRule {
 //    make the final conclusion that s1 is Het
 
 
-// inferHdFromPartialHeterozygousAndKnownDominant (#5)
+// inferHdFromPartialHomozygousAndKnownDominant (#5)
 // IF there is a makeInferences subgoal
 //    AND s1 is a strain with no final conclusion, but partial conclusion "Homozygous"
 //    AND s2 is a strain with dominant phenotype (i.e. it is Het or Hd) that is
 //        the same as s1's phenotype
 // THEN
 //    make the final conclusion that s1 is Hd
+//
+rule inferHdFromPartialHomozygousAndKnownDominant {
+    when {
+        prob: Problem prob.subgoal === "makeInferences";
+        s1: Strain !s1.finalConclusion && partialHomozygous in s1.partialConclusions;
+        s2: Strain isKnownDominantPhenotype(s2) && s2.phenotype === s1.phenotype;
+    }
+    then {
+        modify(s1, "finalConclusion", finalHd);
+    }
+}
 
-// inferHdFromPartialHeterozygousAndKnownRecessive (#5-1)
+// inferHdFromPartialHomozygousAndKnownRecessive (#5-1)
 // Note: This is not in the instructions and it could be unnecessary
 // IF there is a makeInferences subgoal
 //    AND s1 is a strain with no final conclusion, but partial conclusion "Homozygous"
