@@ -56,7 +56,7 @@ define Cross {
     }
 }
 
-define interfaceRow {
+define InterfaceRow {
     name: null,
     iesStrains: null,
     ieResult: null,
@@ -67,7 +67,7 @@ define interfaceRow {
     }
 }
 
-define interfaceElement {
+define InterfaceElement {
     name: null,
     value: null,
     constructor: function(n, v) {

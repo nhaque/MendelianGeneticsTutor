@@ -55,18 +55,18 @@ rule bootstrap {
         for (var i = 1; i < 7; i++) {
             crossName = "Cr"+i;
             rowNames.push(crossName+"Row");
-            assert(new interfaceElement(crossName+"Str1", null));
-            assert(new interfaceElement(crossName+"Str2", null));
-            assert(new interfaceElement(crossName+"Offspring", null));
-            assert(new interfaceRow(crossName+"Row", [crossName+"Str1",crossName+"Str2"], crossName+"Offspring")); 
+            assert(new InterfaceElement(crossName+"Str1", null));
+            assert(new InterfaceElement(crossName+"Str2", null));
+            assert(new InterfaceElement(crossName+"Offspring", null));
+            assert(new InterfaceRow(crossName+"Row", [crossName+"Str1",crossName+"Str2"], crossName+"Offspring")); 
         }
         
         var intElPartName, intElFinalName;
         for (var i = 1; i < 4; i++) {
             intElPartName = "concPartStr"+i;
             intElFinalName = "concFinalStr"+i;
-            assert(new interfaceElement(intElPartName, null));
-            assert(new interfaceElement(intElFinalName, null));
+            assert(new InterfaceElement(intElPartName, null));
+            assert(new InterfaceElement(intElFinalName, null));
         }
         
         assert(new Problem(probname, [strain1.name, strain2.name, strain3.name], rowNames));
@@ -104,8 +104,8 @@ rule selectFirstStrain {
                 prob.interfaceRows {interfaceRows: intRows};
         s: Strain {name: s1};
         exists(c: Cross s1 in c.strains);
-        intRow: interfaceRow intRow.name === intRows[0] {iesStrains: intRowStrains};
-        ie: interfaceElement !ie.value && ie.name in intRowStrains {name: selection};
+        intRow: InterfaceRow intRow.name === intRows[0] {iesStrains: intRowStrains};
+        ie: InterfaceElement !ie.value && ie.name in intRowStrains {name: selection};
     }
     then {
         if (checkSAI({selection: selection, action: "UpdateTextField", input: s1})) {
@@ -163,9 +163,9 @@ rule selectSecondStrainDiff {
                 prob.interfaceRows {interfaceRows: intRows, firstStrainCurCross: s1};
         str2: Strain str2.name !== s1 {name: s2};
         c: Cross s1 in c.strains && s2 in c.strains {offspringExt: o};
-        r: interfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
-        ie2: interfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
-        ie3: interfaceElement ie3.name === sel3;
+        r: InterfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
+        ie2: InterfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
+        ie3: InterfaceElement ie3.name === sel3;
     }
     then {
         if (checkSAI({selection: sel2, action: "UpdateTextField", input: s2})) {
@@ -221,9 +221,9 @@ rule selectSecondStrainSame {
         prob: Problem prob.subgoal === "selectCross" && prob.firstStrainCurCross  && 
                 prob.interfaceRows {interfaceRows: intRows, firstStrainCurCross: s1};
         c: Cross c.strains[0] === s1 && c.strains[1] === s1 {offspringExt: o};
-        r: interfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
-        ie2: interfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
-        ie3: interfaceElement ie3.name === sel3;
+        r: InterfaceRow r.name === intRows[0] {iesStrains: intRowStrains, ieResult: sel3};
+        ie2: InterfaceElement !ie2.value && ie2.name in intRowStrains {name: sel2};
+        ie3: InterfaceElement ie3.name === sel3;
     }
     then {
         if (checkSAI({selection: sel2, action: "UpdateTextField", input: s1})) {
@@ -438,7 +438,7 @@ rule enterPartialConclusionHomozygous {
         prob: Problem prob.subgoal === "enterInferences";
         s: Strain partialHomozygous in s.partialConclusions && !s.partialConclusionWritten && !s.finalConclusionWritten
            {iePartialConclusions: "iePartial"};
-        ie: interfaceElement ie.name === iePartial;
+        ie: InterfaceElement ie.name === iePartial;
     }
     then {
         if (checkSAI({selection: iePartial, action: "UpdateComboBox", input: partialHomozygous})) {
