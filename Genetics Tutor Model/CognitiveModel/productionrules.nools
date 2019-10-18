@@ -28,6 +28,10 @@ function removeDuplicates(l) {
     return ret;
 }
 
+function isKnownDominantPhenotype(strain) {
+    return (strain.finalConclusion === finalHeterozygous) || (strain.finalConclusion === finalHd);
+}
+
 //--------------------------------------------------------------------------------------------
 //
 // Initializing working memory
@@ -339,8 +343,6 @@ rule dummyInferFromCrossRule {
         c: Cross c.name === cName ;
     }
     then {
-		console.log("dummyInfer");
-		
         modify(prob, "curCross", null);
         retract(c);
         modify(prob, "subgoal", "makeInferences");
@@ -385,7 +387,17 @@ rule dummyInferFromCrossRule {
 //        different from s1's phenotype
 // THEN
 //    make the final conclusion that s1 is Hr
-
+//
+rule inferHrFromKnownDominant {
+    when {
+        prob: Problem prob.subgoal === "makeInferences";
+        s1: Strain !s1.finalConclusion;
+        s2: Strain isKnownDominantPhenotype(s2) && s2.phenotype !== s1.phenotype;
+    }
+    then {
+        modify(s1, "finalConclusion", finalHr);
+    }
+}
 
 // inferHrFromPartialsHrOrHetAndHomozygous (#3)
 // IF there is a makeInferences subgoal
@@ -419,6 +431,17 @@ rule dummyInferFromCrossRule {
 //        the same as s1's phenotype
 // THEN
 //    make the final conclusion that s1 is Hd
+//
+rule inferHdFromPartialHomozygousAndKnownDominant {
+    when {
+        prob: Problem prob.subgoal === "makeInferences";
+        s1: Strain !s1.finalConclusion && partialHomozygous in s1.partialConclusions;
+        s2: Strain isKnownDominantPhenotype(s2) && s2.phenotype === s1.phenotype;
+    }
+    then {
+        modify(s1, "finalConclusion", finalHd);
+    }
+}
 
 // inferHdFromPartialHomozygousAndKnownRecessive (#5-1)
 // Note: This is not in the instructions and it could be unnecessary
