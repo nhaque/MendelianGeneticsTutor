@@ -292,27 +292,23 @@ rule inferFromCrossSameStrainSameType100_0 {
 // IF there is an inferFromCross subgoal
 //    AND c is the current Cross such that the same strain is crossed with itself, and the
 //        offspring is 25% of the first phenotype and 75% of the phenotype
-//    AND s1 is the first strain being crossed
-//    AND s2 is the second strain being crossed
+//    AND s is the strain being crossed
 // THEN
 //    remove c from prob's curCross slot
 //    AND retract c from working memory
-//    AND make the final conclusion that s1 is heterozygous
-//    AND make the final conclusion that s2 is homozygous
-
-
+//    AND make the final conclusion that s is heterozygous
+//
 rule inferFromCrossSameStrainSameType75_25 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
         c: Cross c.name === cName && c.strains[0] === c.strains[1] && c.offspringInt[0] === 25;
-        s1: Strain s1.name === c.strains[0];
-        s2: Strain s2.name === c.strains[1];
+        s: Strain s.name === c.strains[0];
     }
     then {
         modify(prob, "curCross", null);
+        modify(s, "finalConclusion", finalHeterozygous);
         retract(c);
-        modify(s1, "finalConclusion", finalHeterozygous);
-        modify(s2, "finalConclusion", finalHr);
+        modify(prob, "subgoal", "makeInferences");
     }
 }
 
