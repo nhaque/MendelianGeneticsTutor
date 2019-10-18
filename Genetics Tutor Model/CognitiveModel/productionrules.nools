@@ -1,5 +1,8 @@
 import("types.nools");
 
+global partialHomozygous = "homozygous";
+global partialHrOrHet = "homozygous recessive or heterozygous";
+
 // Some production rules for the Mendel Abductive Reasoning Tutor
 
 
@@ -265,8 +268,8 @@ rule inferFromCrossSameStrainSameType100_0 {
         s: Strain s.name === c.strains[0];
     }
     then {
-        let n = s.partialConclusions;   
-        n.push("homozygous");
+        let n = s.partialConclusions.slice();
+        n.push(partialHomozygous);
 
         modify(prob, "curCross", null);
         retract(c);
@@ -295,6 +298,7 @@ rule inferFromCrossSameStrainSameType100_0 {
 //    AND set the subgoal to makeInferences
 //
 rule dummyInferFromCrossRule {
+    salience: -5;         //  critical!!
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
         c: Cross c.name === cName ;
@@ -420,14 +424,42 @@ rule doneInferencing {
 //
 //--------------------------------------------------------------------------------------------
 
+// enterPartialConclusionHomozygous
+// IF we have an enterInferences subgoal
+//    AND s is a strain with partial conclusion "homozygous" and it has not been written,
+//           and final conclusion has also not been written
+//    AND ie is the partial conclusion box for s
+// THEN
+//     Write "homozygous" into ie
+//     AND update the strain to note that partial conclusion has been written
+//    
+rule enterPartialConclusionHomozygous {
+    when {
+        prob: Problem prob.subgoal === "enterInferences";
+        s: Strain partialHomozygous in s.partialConclusions && !s.partialConclusionWritten && !s.finalConclusionWritten
+           {iePartialConclusions: "iePartial"};
+        ie: interfaceElement ie.name === iePartial;
+    }
+    then {
+        if (checkSAI({selection: iePartial, action: "UpdateComboBox", input: partialHomozygous})) {
+            modify(ie, "value", partialHomozygous);
+            modify(s, "partialConclusionWritten", true);
+            halt();
+        } else {
+            backtrack();
+        }
+    }
+}
+
+
 // Notes doneWithMandatoryInput
 // IF we have an enterInferences subgoal
 //    AND we do not have a strain with a final conclusion that has not been written
 //    AND we do not have a strain with one or more partial conclusions that have not
-//           been written, unless a full conclusion has been written for that strain
+//           been written, unless a final conclusion has been written for that strain
 // THEN
 //    Move on to the selectCross subgoal
-
+//
 rule doneWithMandatoryInput {
     when {
         prob: Problem prob.subgoal === "enterInferences";
