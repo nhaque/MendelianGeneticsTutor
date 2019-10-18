@@ -1,7 +1,11 @@
 import("types.nools");
 
+// Strings for partial/final conclusions
 global partialHomozygous = "homozygous";
 global partialHrOrHet = "homozygous recessive or heterozygous";
+global finalHeterozygous = "heterozygous";
+global finalHd = "homozygous dominant";
+global finalHr = "homozygous recessive";
 
 global finalHeterozygous = "heterozygous";
 global finalHr = "homozygous recessive";
@@ -261,9 +265,15 @@ rule selectSecondStrainSame {
 
 
 // rule inferFromSameStrainSameType100_0
-//IF there is an inferFromCross subgoal
-//    AND c is the current Cross
-//    AND
+// IF there is an inferFromCross subgoal
+//    AND c is the current Cross such that the same strain is crossed with itself, and the
+//        offspring is 100% the same phenotype
+//    AND s is the strain being crossed
+// THEN
+//    infer the partial conclusion that s is homozygous
+//    AND remove c from prob's curCross slot
+//    AND retract c from working memory
+//    AND set the subgoal to makeInferences
 rule inferFromCrossSameStrainSameType100_0 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
@@ -273,11 +283,10 @@ rule inferFromCrossSameStrainSameType100_0 {
     then {
         let n = s.partialConclusions.slice();
         n.push(partialHomozygous);
-
+        modify(s, "partialConclusions", n);
         modify(prob, "curCross", null);
         retract(c);
         modify(prob, "subgoal", "makeInferences");
-        modify(s, "partialConclusions", n);
     }
 }
 
@@ -483,6 +492,107 @@ rule enterPartialConclusionHomozygous {
     }
 }
 
+// enterPartialConclusionHrOrHet
+// IF we have an enterInferences subgoal
+//    AND s is a strain with partial conclusion "homozygous recessive or heterozygous"
+//           and it has not been written, and final conclusion has also not been written
+//    AND ie is the partial conclusion box for s
+// THEN
+//     Write "homozygous recessive or heterozygous" into ie
+//     AND update the strain to note that partial conclusion has been written
+//    
+rule enterPartialConclusionHrOrHet {
+    when {
+        prob: Problem prob.subgoal === "enterInferences";
+        s: Strain partialHrOrHet in s.partialConclusions && !s.partialConclusionWritten && !s.finalConclusionWritten
+           {iePartialConclusions: "iePartial"};
+        ie: InterfaceElement ie.name === iePartial;
+    }
+    then {
+        if (checkSAI({selection: iePartial, action: "UpdateComboBox", input: partialHrOrHet})) {
+            modify(ie, "value", partialHrOrHet);
+            modify(s, "partialConclusionWritten", true);
+            halt();
+        } else {
+            backtrack();
+        }
+    }
+}
+
+// enterFinalConclusionHeterozygous
+// IF we have an enterInferences subgoal
+//    AND s is a strain with final conclusion "heterozygous" and it has not been written,
+//    AND ie is the final conclusion box for s
+// THEN
+//     Write "heterozygous" into ie
+//     AND update the strain to note that final conclusion has been written
+//    
+rule enterFinalConclusionHeterozygous {
+    when {
+        prob: Problem prob.subgoal === "enterInferences";
+        s: Strain s.finalConclusion === finalHeterozygous && !s.finalConclusionWritten {ieFinalConclusions: "ieFinal"};
+        ie: InterfaceElement ie.name === ieFinal;
+    }
+    then {
+        if (checkSAI({selection: ieFinal, action: "UpdateComboBox", input: finalHeterozygous})) {
+            modify(ie, "value", finalHeterozygous);
+            modify(s, "finalConclusionWritten", true);
+            halt();
+        } else {
+            backtrack();
+        }
+    }
+}
+
+// enterFinalConclusionHomozygousRecessive
+// IF we have an enterInferences subgoal
+//    AND s is a strain with final conclusion "homozygous recessive" and it has not been written,
+//    AND ie is the final conclusion box for s
+// THEN
+//     Write "homozygous recessive" into ie
+//     AND update the strain to note that final conclusion has been written
+//    
+rule enterFinalConclusionHomozygousRecessive {
+    when {
+        prob: Problem prob.subgoal === "enterInferences";
+        s: Strain s.finalConclusion === finalHr && !s.finalConclusionWritten {ieFinalConclusions: "ieFinal"};
+        ie: InterfaceElement ie.name === ieFinal;
+    }
+    then {
+        if (checkSAI({selection: ieFinal, action: "UpdateComboBox", input: finalHr})) {
+            modify(ie, "value", finalHr);
+            modify(s, "finalConclusionWritten", true);
+            halt();
+        } else {
+            backtrack();
+        }
+    }
+}
+
+// enterFinalConclusionHomozygousDominant
+// IF we have an enterInferences subgoal
+//    AND s is a strain with final conclusion "homozygous dominant" and it has not been written,
+//    AND ie is the final conclusion box for s
+// THEN
+//     Write "homozygous dominant" into ie
+//     AND update the strain to note that final conclusion has been written
+//    
+rule enterFinalConclusionHomozygousDominant {
+    when {
+        prob: Problem prob.subgoal === "enterInferences";
+        s: Strain s.finalConclusion === finalHd && !s.finalConclusionWritten {ieFinalConclusions: "ieFinal"};
+        ie: InterfaceElement ie.name === ieFinal;
+    }
+    then {
+        if (checkSAI({selection: ieFinal, action: "UpdateComboBox", input: finalHd})) {
+            modify(ie, "value", finalHd);
+            modify(s, "finalConclusionWritten", true);
+            halt();
+        } else {
+            backtrack();
+        }
+    }
+}
 
 // Notes doneWithMandatoryInput
 // IF we have an enterInferences subgoal
