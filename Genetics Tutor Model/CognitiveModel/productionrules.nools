@@ -3,6 +3,9 @@ import("types.nools");
 global partialHomozygous = "homozygous";
 global partialHrOrHet = "homozygous recessive or heterozygous";
 
+global finalHeterozygous = "heterozygous";
+global finalHr = "homozygous recessive";
+
 // Some production rules for the Mendel Abductive Reasoning Tutor
 
 
@@ -279,8 +282,37 @@ rule inferFromCrossSameStrainSameType100_0 {
 }
 
 // rule inferFromSameStrainSameType75_25
+// IF there is an inferFromCross subgoal
+//    AND c is the current Cross such that the same strain is crossed with itself, and the
+//        offspring is 25% of the first phenotype and 75% of the phenotype
+//    AND s1 is the first strain being crossed
+//    AND s2 is the second strain being crossed
+// THEN
+//    remove c from prob's curCross slot
+//    AND retract c from working memory
+//    AND make the final conclusion that s1 is heterozygous
+//    AND make the final conclusion that s2 is homozygous
+
+
+rule inferFromCrossSameStrainSameType75_25 {
+    when {
+        prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
+        c: Cross c.name === cName && c.strains[0] === c.strains[1] && c.offspringInt[0] === 25;
+        s1: Strain s1.name === c.strains[0];
+        s2: Strain s2.name === c.strains[1];
+    }
+    then {
+        modify(prob, "curCross", null);
+        retract(c);
+        modify(s1, "finalConclusion", finalHeterozygous);
+        modify(s2, "finalConclusion", finalHr);
+    }
+}
 
 // rule inferFromDiffStrainSameType100_0
+
+
+
 // rule inferFromDiffStrainSameType75_25
 
 // rule inferFromDiffStrainDiffType100_0
