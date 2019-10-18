@@ -7,8 +7,6 @@ global finalHeterozygous = "heterozygous";
 global finalHd = "homozygous dominant";
 global finalHr = "homozygous recessive";
 
-global finalHeterozygous = "heterozygous";
-global finalHr = "homozygous recessive";
 
 // Some production rules for the Mendel Abductive Reasoning Tutor
 
