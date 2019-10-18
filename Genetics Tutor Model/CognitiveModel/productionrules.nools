@@ -524,7 +524,7 @@ rule enterPartialConclusionHrOrHet {
 rule enterFinalConclusionHeterozygous {
     when {
         prob: Problem prob.subgoal === "enterInferences";
-        s: Strain s.finalConclusion === finalHeterozygous && !s.finalConclusionWritten {ieFinalConclusions: "ieFinal"};
+        s: Strain s.finalConclusion === finalHeterozygous && !s.finalConclusionWritten {ieFinalConclusion: "ieFinal"};
         ie: InterfaceElement ie.name === ieFinal;
     }
     then {
@@ -549,7 +549,7 @@ rule enterFinalConclusionHeterozygous {
 rule enterFinalConclusionHomozygousRecessive {
     when {
         prob: Problem prob.subgoal === "enterInferences";
-        s: Strain s.finalConclusion === finalHr && !s.finalConclusionWritten {ieFinalConclusions: "ieFinal"};
+        s: Strain s.finalConclusion === finalHr && !s.finalConclusionWritten {ieFinalConclusion: "ieFinal"};
         ie: InterfaceElement ie.name === ieFinal;
     }
     then {
@@ -574,7 +574,7 @@ rule enterFinalConclusionHomozygousRecessive {
 rule enterFinalConclusionHomozygousDominant {
     when {
         prob: Problem prob.subgoal === "enterInferences";
-        s: Strain s.finalConclusion === finalHd && !s.finalConclusionWritten {ieFinalConclusions: "ieFinal"};
+        s: Strain s.finalConclusion === finalHd && !s.finalConclusionWritten {ieFinalConclusion: "ieFinal"};
         ie: InterfaceElement ie.name === ieFinal;
     }
     then {
