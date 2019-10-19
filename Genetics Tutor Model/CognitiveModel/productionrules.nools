@@ -764,7 +764,29 @@ rule doneWithMandatoryInput {
 //
 //--------------------------------------------------------------------------------------------
 
+// rule done
+// IF there is an enterInferences subgoal
+//    AND s1 is the first strain with the correct final conclusion written
+//    AND s2 is the second strain with the correct final conclusion written such that s1 in not equal to s2
+//    AND s3 is the third strain with the correct final conclusion written such that s1 is neither equal to s2 or s3
+// THEN
+//    Click done
 
+
+rule done {
+    when {
+        prob: Problem prob.subgoal === "enterInferences";
+        s1: Strain s1.finalConclusionWritten === true;
+        s2: Strain s1 !== s2 && s2.finalConclusionWritten === true;
+        s3: Strain s3 != s2 && s3 != s1 && s3.finalConclusionWritten === true;  
+    }
+    then {
+        if (checkSAI({selection: "done", action: "ButtonPressed", input: "don't_care"})) {
+            halt();
+        }
+    }
+
+}
 
 // Note: Should the done rule test for a specific subgoal?  Which subgoal?
 
