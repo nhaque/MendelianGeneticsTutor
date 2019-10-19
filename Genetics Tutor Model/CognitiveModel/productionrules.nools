@@ -336,7 +336,6 @@ rule inferFromCrossSameStrainSameType75_25 {
 //    ELSE set the final conclusion of s1 as homozygous recessive and s2 as homozygous dominant
 //    AND remove c from prob's curCross slot
 //    AND retract c from working memory
-//    AND make the final conclusion that s is heterozygous
 //    AND set the subgoal to makeInferences
 
 rule inferFromDiffStrainDiffType100_0 {
@@ -368,12 +367,9 @@ rule inferFromDiffStrainDiffType100_0 {
 //        offspring is 25% of the first phenotype and 75% of the phenotype 
 //    AND s1 and s2 are strains with different phenotypes being crossed 
 // THEN
-//    IF phenotype of s1 is the same as offspring's phenotype
-//    THEN set the final conclusion of s1 as homozygous dominant and s2 as homozygous recessive
-//    ELSE set the final conclusion of s1 as homozygous recessive and s2 as homozygous dominant
+//    infer the partial conclusion that s1 and s2 are homozygous recessive or heterozygous
 //    AND remove c from prob's curCross slot
 //    AND retract c from working memory
-//    AND make the final conclusion that s is heterozygous
 //    AND set the subgoal to makeInferences
 
 rule inferFromDiffStrainDiffType50_50 {
