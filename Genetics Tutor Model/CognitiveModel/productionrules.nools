@@ -296,13 +296,13 @@ rule inferFromCrossSameStrainSameType100_0 {
 // rule inferFromSameStrainSameType75_25
 // IF there is an inferFromCross subgoal
 //    AND c is the current Cross such that the same strain is crossed with itself, and the
-//        offspring is 25% of the first phenotype and 75% of the phenotype
+//        offspring is 25% of the first phenotype and 75% of the second phenotype
 //    AND s is the strain being crossed
 // THEN
 //    remove c from prob's curCross slot
 //    AND retract c from working memory
 //    AND make the final conclusion that s is heterozygous
-//
+
 rule inferFromCrossSameStrainSameType75_25 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
@@ -322,6 +322,15 @@ rule inferFromCrossSameStrainSameType75_25 {
 
 
 // rule inferFromDiffStrainSameType75_25
+// IF there is an inferFromCross subgoal
+//    AND c is the current Cross with 2 different strains, and the
+//        offspring is 25% of the first phenotype and 75% of the second phenotype
+//    AND s1 and s2 are different strains having the same phenotype
+// THEN
+//    remove c from prob's curCross slot
+//    AND retract c from working memory
+//    AND make the final conclusion that both s1 and s2 are heterozygous
+
 rule inferFromDiffStrainSameType75_25 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
@@ -380,7 +389,7 @@ rule inferFromDiffStrainDiffType100_0 {
 // rule inferFromDiffStrainDiffType50_50
 // IF there is an inferFromCross subgoal
 //    AND c is the current Cross with 2 different strains, and the
-//        offspring is 50% of the first phenotype and 50% of the phenotype 
+//        offspring is 50% of each phenotype
 //    AND s1 and s2 are strains with different phenotypes being crossed 
 // THEN
 //    infer the partial conclusion that s1 and s2 are homozygous recessive or heterozygous
