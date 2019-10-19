@@ -518,6 +518,17 @@ rule inferHrFromPartialsHrOrHetAndHomozygous {
 // THEN
 //    make the final conclusion that s1 is Het
 
+rule inferHetFromPartialHrOrHetAndKnownRecessive {
+    when {
+        prob: Problem prob.subgoal === "makeInferences";
+        s1: Strain !s1.finalConclusion && partialHrOrHet in s1.partialConclusions;
+        s2: Strain s2.finalConclusion === finalHr && s2.phenotype !== s1.phenotype;
+    }
+    then {
+        modify(s1, "finalConclusion", finalHeterozygous);
+    }
+}
+
 // inferHetFromPartialHrOrHetAndKnownDominant (#4-1)
 // Note: This is not in the instructions and it could be unnecessary
 // IF there is a makeInferences subgoal
@@ -752,6 +763,8 @@ rule doneWithMandatoryInput {
 // You will need to write a done rule.
 //
 //--------------------------------------------------------------------------------------------
+
+
 
 // Note: Should the done rule test for a specific subgoal?  Which subgoal?
 
