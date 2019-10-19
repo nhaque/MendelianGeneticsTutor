@@ -334,7 +334,7 @@ rule inferFromCrossSameStrainSameType75_25 {
 rule inferFromDiffStrainSameType75_25 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
-        c: Cross c.name === cName && c.strains[0] != c.strains[1] && c.offspringInt[0] === 25;
+        c: Cross c.name === cName && c.strains[0] !== c.strains[1] && c.offspringInt[0] === 25;
         s1: Strain s1.name === c.strains[0];
         s2: Strain s2.name === c.strains[1] && s2.phenotype === s1.phenotype;
     }
@@ -346,7 +346,6 @@ rule inferFromDiffStrainSameType75_25 {
         modify(prob, "subgoal", "makeInferences");
     }
 }
-
 
 
 
@@ -366,9 +365,9 @@ rule inferFromDiffStrainSameType75_25 {
 rule inferFromDiffStrainDiffType100_0 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
-        c: Cross c.name === cName && c.strains[0] != c.strains[1] && c.offspringInt[0] === 100;
+        c: Cross c.name === cName && c.strains[0] !== c.strains[1] && c.offspringInt[0] === 100;
         s1: Strain s1.name === c.strains[0];
-        s2: Strain s2.name === c.strains[1] && s2.phenotype != s1.phenotype;
+        s2: Strain s2.name === c.strains[1] && s2.phenotype !== s1.phenotype;
     }
     then {
         modify(prob, "curCross", null);
@@ -400,9 +399,9 @@ rule inferFromDiffStrainDiffType100_0 {
 rule inferFromDiffStrainDiffType50_50 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
-        c: Cross c.name === cName && c.strains[0] != c.strains[1] && c.offspringInt[0] === 50;
+        c: Cross c.name === cName && c.strains[0] !== c.strains[1] && c.offspringInt[0] === 50;
         s1: Strain s1.name === c.strains[0];
-        s2: Strain s2.name === c.strains[1] && s2.phenotype != s1.phenotype;
+        s2: Strain s2.name === c.strains[1] && s2.phenotype !== s1.phenotype;
     }
     then {
         modify(prob, "curCross", null);
@@ -500,6 +499,16 @@ rule inferHrFromKnownDominant {
 //        "Het or Hr" and "homozygous"
 // THEN
 //    make the final conclusion that s is Hr
+
+rule inferHrFromPartialsHrOrHetAndHomozygous {
+    when {
+        prob: Problem prob.subgoal === "makeInferences";
+        s: Strain !s.finalConclusion && partialHrOrHet in s.partialConclusions && partialHomozygous in s.partialConclusions; 
+    }
+    then {
+        modify(s, "finalConclusion", finalHr);
+    }
+}
 
 
 // inferHetFromPartialHrOrHetAndKnownRecessive (#4)
