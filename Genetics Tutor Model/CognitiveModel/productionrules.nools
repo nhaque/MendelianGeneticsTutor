@@ -324,11 +324,12 @@ rule inferFromCrossSameStrainSameType75_25 {
 // rule inferFromDiffStrainSameType75_25
 
 
+
 // rule inferFromDiffStrainDiffType100_0
 // IF there is an inferFromCross subgoal
-//    AND c is the current Cross such that the same strain is crossed with itself, and the
-//        offspring is 25% of the first phenotype and 75% of the phenotype
-//    AND s is the strain being crossed
+//    AND c is the current Cross with 2 different strains, and the
+//        offspring is 100% of the first phenotype 
+//    AND s1 and s2 are strains with different phenotypes being crossed 
 // THEN
 //    IF phenotype of s1 is the same as offspring's phenotype
 //    THEN set the final conclusion of s1 as homozygous dominant and s2 as homozygous recessive
@@ -342,8 +343,8 @@ rule inferFromDiffStrainDiffType100_0 {
     when {
         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
         c: Cross c.name === cName && c.strains[0] != c.strains[1] && c.offspringInt[0] === 100;
-        s1: Strain s1.name === c.strains[1];
-        s2: Strain s2.name === c.strains[0] && s2.phenotype != s1.phenotype;
+        s1: Strain s1.name === c.strains[0];
+        s2: Strain s2.name === c.strains[1] && s2.phenotype != s1.phenotype;
     }
     then {
         modify(prob, "curCross", null);
@@ -362,6 +363,41 @@ rule inferFromDiffStrainDiffType100_0 {
 }
 
 // rule inferFromDiffStrainDiffType50_50
+// IF there is an inferFromCross subgoal
+//    AND c is the current Cross with 2 different strains, and the
+//        offspring is 25% of the first phenotype and 75% of the phenotype 
+//    AND s1 and s2 are strains with different phenotypes being crossed 
+// THEN
+//    IF phenotype of s1 is the same as offspring's phenotype
+//    THEN set the final conclusion of s1 as homozygous dominant and s2 as homozygous recessive
+//    ELSE set the final conclusion of s1 as homozygous recessive and s2 as homozygous dominant
+//    AND remove c from prob's curCross slot
+//    AND retract c from working memory
+//    AND make the final conclusion that s is heterozygous
+//    AND set the subgoal to makeInferences
+
+rule inferFromDiffStrainDiffType50_50 {
+    when {
+        prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
+        c: Cross c.name === cName && c.strains[0] != c.strains[1] && c.offspringInt[0] === 50;
+        s1: Strain s1.name === c.strains[0];
+        s2: Strain s2.name === c.strains[1] && s2.phenotype != s1.phenotype;
+    }
+    then {
+        modify(prob, "curCross", null);
+
+        let n1 = s1.partialConclusions.slice();
+        n1.push(partialHrOrHet);
+        
+        let n2 = s2.partialConclusions.slice();
+        n2.push(partialHrOrHet);
+
+        modify(s1, "partialConclusions", n1);
+        modify(s2, "partialConclusions", n2);
+        retract(c);
+        modify(prob, "subgoal", "makeInferences");
+    }
+}
 
 
 // dummyInferFromCrossRule
