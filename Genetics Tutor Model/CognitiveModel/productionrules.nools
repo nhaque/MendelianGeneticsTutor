@@ -318,7 +318,29 @@ rule inferFromCrossSameStrainSameType75_25 {
 }
 
 // rule inferFromDiffStrainSameType100_0
-
+// IF there is an inferFromCross subgoal
+//    AND c is the current Cross with 2 different strains, and the
+//        offspring is 100% of the same phenotype 
+//    AND s1 is the first strain in the cross
+//    AND s2 is the second strain in the cross, having the same phenotype as s1
+// THEN
+//    remove c from prob's curCross slot (no inference is made)
+//    AND retract c from working memory
+//    AND set the subgoal to makeInferences
+//
+rule inferFromDiffStrainSameType100_0 {
+    when {
+        prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
+        c: Cross c.name === cName && c.strains[0] !== c.strains[1] && c.offspringInt[0] === 100;
+        s1: Strain s1.name === c.strains[0];
+        s2: Strain s2.name === c.strains[1] && s2.phenotype === s1.phenotype;
+    }
+    then {
+        modify(prob, "curCross", null);
+        retract(c);
+        modify(prob, "subgoal", "makeInferences");
+    }
+}
 
 
 // rule inferFromDiffStrainSameType75_25
@@ -430,18 +452,17 @@ rule inferFromDiffStrainDiffType50_50 {
 //    AND retract c from working memory
 //    AND set the subgoal to makeInferences
 //
-rule dummyInferFromCrossRule {
-    salience: -5;         //  critical!!
-    when {
-        prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
-        c: Cross c.name === cName ;
-    }
-    then {
-        modify(prob, "curCross", null);
-        retract(c);
-        modify(prob, "subgoal", "makeInferences");
-    }
-}
+// rule dummyInferFromCrossRule {
+//     when {
+//         prob: Problem prob.subgoal === "inferFromCross" {curCross: cName};
+//         c: Cross c.name === cName ;
+//     }
+//     then {
+//         modify(prob, "curCross", null);
+//         retract(c);
+//         modify(prob, "subgoal", "makeInferences");
+//     }
+// }
 // Notes re dummyInferFromCrossRule
 // 1. You are going to have a set of rules, based on your cognitive task analysis, that all
 //        follow this same patterns
