@@ -602,7 +602,7 @@ rule doneInferencing {
         halt();
     }
 }
-// Notes re dummyInferFromCrossRule
+// Notes re dummyInferFromCrossRule <- Do you mean doneInferencing
 // 1. This is NOT a dummy rule; i.e., this rule will be needed in the final version of 
 //        your model
 // Questions to help your understanding
